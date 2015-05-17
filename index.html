@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <title>My app</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- In <head> to make work ng-cloak without css -->
+    <script src="app/vendor/angular/angular.js"></script>
+    <script src="app/vendor/angular-indexed-db/angular-indexed-db.js"></script>
+    <script src="app/app.js"></script>
+
+</head>
+<body ng-app="app" ng-cloak>
+    <div class="container" ng-controller="MainController as vm">
+
+        <ul>
+            <li ng-repeat="task in vm.tasks">
+                <div>{{ $index + 1 }}</div>
+                <div>{{ task.title }}</div>
+                <div>{{ task.body }}</div>
+                <div>Done: {{ task.done }}</div>
+                <button ng-click="vm.toggleState(task)">Toggle done</button>
+            </li>
+        </ul>
+
+        <button ng-click="vm.clearTasks()">Clear Tasks</button>
+
+        <h3>New task :</h3>
+        <form ng-submit="vm.addTask()">
+            <div>
+                <input ng-model="vm.newtask.title" placeholder="Title" required />
+            </div>
+            <div>
+                <textarea ng-model="vm.newtask.body" placeholder="description" required></textarea>
+            </div>
+            <div>
+                <input type="submit" value="Add task" />
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>
