@@ -8,15 +8,16 @@
 
     angular
         .module('app', [
-            'indexedDB'
+            'indexedDB',
+            'ngMaterial'
         ])
         .config(AppConfig)
         .controller('MainController', MainController)
         .factory('taskService', TaskService);
 
 
-    AppConfig.$inject = ['$indexedDBProvider'];
-    function AppConfig($indexedDBProvider) {
+    AppConfig.$inject = ['$indexedDBProvider', '$mdThemingProvider', '$mdIconProvider'];
+    function AppConfig($indexedDBProvider, $mdThemingProvider, $mdIconProvider) {
 
         $indexedDBProvider
             .connection('appIndexedDB')
@@ -28,25 +29,36 @@
                 // objStore.createIndex('id_idx', 'id', {unique: true});
                 // objStore.createIndex('cat_idx', 'cat', {unique: false});
             });
+
+
+        $mdIconProvider
+            .icon("menu", "app/assets/svg/menu.svg", 24);
+
+        $mdThemingProvider.theme('default')
+            // .primaryPalette('brown')
+            .accentPalette('brown');
+
     }
 
 
-    MainController.$inject = ['taskService', '$indexedDB'];
-    function MainController(taskService, $indexedDB) {
+    MainController.$inject = ['$q', '$indexedDB', '$mdDialog', '$mdSidenav', 'taskService'];
+    function MainController($q, $indexedDB, $mdDialog, $mdSidenav, taskService) {
         var vm = this;
 
         vm.tasks = [];
-        vm.addTask = addTask;
+        vm.selectTask = selectTask;
         vm.clearTasks = clearTasks;
-        vm.toggleState = toggleState;
-        vm.newtask = {};
+        vm.showForm = showForm;
+        vm.save = save;
+        vm.toggleSidebar = toggleSidebar;
+        // vm.newtask = {};
+        vm.selected = false;
 
 
         ////////////
 
         function loadTasks() {
             taskService.getAll().then(function(tasks) {
-                console.log("TASKS", tasks);
                 vm.tasks = tasks;
             });
         }
@@ -58,17 +70,20 @@
          * ViewModel functions
          */
 
-        function addTask() {
-            console.log("Add new task !", vm.newtask);
-            taskService.save(vm.newtask).then(function(){
-                //clear form
-                vm.newtask = {};
+        // function addTask(task) {
+        //     taskService.save(task).then(function() {
+        //         //update tasks list
+        //         loadTasks();
+        //     });
+        // }
 
-                //update tasks list
-                loadTasks();
+        function selectTask(task) {
+            var pending = $mdSidenav('left').close() || $q.when(true);
+
+            pending.then(function(){
+                vm.selected = task;
             });
         }
-
 
         function clearTasks() {
             taskService.clearTasks().then(function() {
@@ -77,15 +92,58 @@
             });
         }
 
+        function showForm(ev) {
+            $mdDialog.show({
+                controller: DialogController,
+                controllerAs: 'vm',
+                templateUrl: 'app/newTaskForm.tpl.html',
+                targetEvent: ev,
+            })
+            .then(function(task) {
+                save(task);
+            });
+        };
 
-        function toggleState(task) {
-            task.done = !task.done;
+
+        // function toggleState(task) {
+        function save(task) {
+            // task.done = !task.done;
             taskService.save(task).then(function() {
                 //update tasks list
                 loadTasks();
             });
         }
 
+
+         function toggleSidebar() {
+
+            // var pending = $mdBottomSheet.hide() || $q.when(true);
+            var pending = $q.when(true);
+
+            pending.then(function(){
+                $mdSidenav('left').toggle();
+            });
+        }
+    }
+
+
+    DialogController.$inject = ['$mdDialog'];
+    function DialogController($mdDialog) {
+        var vm = this;
+
+        vm.task = {};
+        vm.cancel = cancel;
+        vm.success = success;
+
+        ////////////
+
+        function cancel() {
+            $mdDialog.cancel();
+        }
+
+        function success(task) {
+            $mdDialog.hide(task);
+        }
     }
 
 
@@ -117,6 +175,8 @@
             }
 
             openStore(function(store) {
+
+                console.log('Before insert ', task);
 
                 if (task.id) {
                     store.upsert(task).then(function() {
@@ -169,7 +229,6 @@
 
             return deferred.promise;
         }
-
     }
 
 
