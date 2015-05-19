@@ -1,14 +1,17 @@
 <md-dialog aria-label="New Task Form">
     <form>
-        <md-dialog-content class="sticky-container">
-            <h3>New task :</h3>
-            <div>
-                <input ng-model="vm.task.title" placeholder="Title" required />
-            </div>
-            <div>
-                <textarea ng-model="vm.task.body" placeholder="description" required></textarea>
-            </div>
+        <md-dialog-content layout="column">
+            <md-input-container>
+                <label>Title</label>
+                <input ng-model="vm.task.title">
+            </md-input-container>
+
+            <md-input-container flex>
+                <label>Description</label>
+                <textarea ng-model="vm.task.body" columns="1" md-maxlength="300"></textarea>
+            </md-input-container>
         </md-dialog-content>
+
         <div class="md-actions" layout="row">
             <md-button ng-click="vm.success(vm.task)" type="submit" class="md-primary">
                 Save
