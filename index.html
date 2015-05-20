@@ -27,24 +27,22 @@
     </md-toolbar>
 
     <div flex layout="row">
-        <!-- ng-click="vm.isElem('span', $event) && (vm.selected = {})" -->
         <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left"
-                layout="column"
-                ng-click="vm.isElem('span', $event) && (vm.selected = {})">
+                layout="column">
             <md-tabs md-stretch-tabs="always">
                 <md-tab flex label="ALL" md-on-select="vm.filterTasks('all');"></md-tab>
                 <md-tab flex label="TODO" md-on-select="vm.filterTasks('todo');"></md-tab>
-                <md-tab flex label="DONE" md-on-select="vm.filterTasks('done');"></md-tab>
+                <md-tab flex label="DONE" md-on-select="vm.filterTasks('done')"></md-tab>
             </md-tabs>
             <md-divider></md-divider>
-            <div flex ng-show="!vm.filteredTasks.length" class="watermark center">
+            <div flex ng-show="!vm.tasks.length" class="watermark center">
                 <h2 class="md-subhead">No task found</h2>
             </div>
             <md-list flex>
-                <md-list-item class="task-list-item appear sample-show-hide"
-                        ng-repeat="task in vm.filteredTasks |
+                <md-list-item class="task-list-item"
+                        ng-repeat="task in vm.tasks |
                             orderBy:'createdAt':true track by $index"
-                        ng-class="{'active' : task.id === vm.selected.id,
+                        ng-class="{'active' : task._id === vm.selected._id,
                                    'done' : task.done}"
                         ng-click="vm.selectTask(task)">
 
@@ -53,34 +51,33 @@
                     </div>
                     <span flex></span>
                     <md-checkbox class="md-secondary"
+                        aria-label="Is task done ?"
                         ng-model="task.done"
                         ng-change="vm.save(task, true)">
                         <md-tooltip md-direction="right">Is task done ?</md-tooltip>
                     </md-checkbox>
                 </md-list-item>
             </md-list>
-            <md-button ng-click="vm.confirm($event, vm.clearTasks)">Clear tasks</md-button>
+            <md-button ng-click="vm.confirm($event, vm.clearTasks)">Clear done tasks</md-button>
         </md-sidenav>
 
         <md-content flex id="content">
-            <div ng-show="!vm.selected.id">
+            <div ng-show="!vm.selected._id">
                 <h2 class="md-display-1 watermark light">No task selected</h2>
             </div>
-            <div ng-show="vm.selected.id" layout="column">
+            <div ng-show="vm.selected._id" layout="column">
                 <div layout="row">
                     <h1 class="md-headline">{{vm.selected.title}}</h1>
                     <span flex></span>
-                     <md-switch class="md-primary" md-no-ink aria-label="Set done"
+                     <md-switch class="md-secondary" md-no-ink aria-label="Set done"
                             ng-model="vm.selected.done"
                             ng-change="vm.save(vm.selected)">
                         <span ng-show="!vm.selected.done" >TODO</span>
                         <span ng-show="vm.selected.done" >DONE</span>
                     </md-switch>
                 </div>
-                <p class="md-body-1 pre">{{vm.selected.body}}</p>
+                <p class="md-body-1" ng-bind-html="vm.selected.body | nl2br"></p>
             </div>
-
-            <button ng-click="vm.debug()">DEBUG</button>
         </md-content>
 
     </div>
@@ -92,6 +89,7 @@
     <script src="app/vendor/angular-material/angular-material.min.js"></script>
     <script src="app/vendor/angular-indexed-db/angular-indexed-db.js"></script>
     <script src="app/vendor/pouchdb/dist/pouchdb.min.js"></script>
+    <script src="app/vendor/lodash/lodash.min.js"></script>
 
     <script src="app/app.js"></script>
     <script src="app/src/task.service.js"></script>

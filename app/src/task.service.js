@@ -20,33 +20,27 @@
 
         ////////////
 
-        function openStore(callback) {
-            $indexedDB.openStore(cfg.storeName, callback);
-        }
-
         function save(task) {
             var deferred = $q.defer();
 
             //promise callbacks
             function success(response) {
-                console.log('After insert success', response);
                 deferred.resolve(response);
             }
-
             function error(err) {
                 console.log('After insert error', err);
             }
 
-
-            if (task._id) {
-                pouchDB.put(task).then(success, error);
-            }
-            else {
-                task.createdAt = d.toISOString();
+            if (!task._id) {
+                var date = new Date().toISOString();
+                task._id       = date;
+                task.createdAt = date;
                 task.done      = false;
-
-                pouchDB.post(task).then(success, error);
             }
+
+            pouchDB.put(task)
+                .then(success)
+                .catch(error);
 
             return deferred.promise;
         }
@@ -56,35 +50,55 @@
             return pouchDB.get(id);
         }
 
-
         function getAll(filter) {
-            var status = '';
+            var deferred = $q.defer(),
+                status   = '',
+                options  = {include_docs : true};
 
-            console.log("filter", pouchDB);
-
-            if (typeof filter === 'undefined' || filter === 'all') {
-                return pouchDB.allDocs();
+            function success(response) {
+                var tasks = [];
+                for(var i in response.rows) {
+                    tasks.push(response.rows[i].doc);
+                }
+                deferred.resolve(tasks);
+            }
+            function error(err) {
+                console.log('Error', err)
             }
 
-            else if (filter === 'todo') { status = false; }
-            else if (filter === 'done') { status = true; }
 
-            return pouchDB.query(function(doc, emit) {
-                if (doc.done === status) { emit(doc); }
-            });
+            if (typeof filter === 'undefined' || filter === 'all') {
+                pouchDB.allDocs(options)
+                    .then(success)
+                    .catch(error);
+            }
+            else {
+                if      (filter === 'todo') { status = false; }
+                else if (filter === 'done') { status = true; }
+
+                pouchDB.query(function (doc, emit) {
+                    if (doc.done === status) { emit(doc); }
+                }, options)
+                    .then(success)
+                    .catch(error);
+            }
+
+            return deferred.promise;
         }
 
-        function clearTasks() {
-            return pouchDB.destroy();
-            // var deferred = $q.defer();
+        function clearTasks(filter) {
+            var deferred = $q.defer();
 
-            // openStore(function(store) {
-            //     store.clear().then(function() {
-            //         return deferred.resolve();
-            //     });
-            // });
+            getAll(filter).then(function(tasks) {
+                _.each(tasks, function(task, i) {
+                    tasks[i]._deleted = true;
+                });
+                pouchDB.bulkDocs(tasks).then(function(result) {
+                    deferred.resolve(result);
+                });
+            });
 
-            // return deferred.promise;
+            return deferred.promise;
         }
     }
 

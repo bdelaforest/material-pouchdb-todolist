@@ -5,8 +5,8 @@
         .module('app')
         .controller('TasksController', TasksController);
 
-    TasksController.$inject = ['$q', '$filter', '$timeout', '$indexedDB', '$mdDialog', '$mdSidenav', 'taskService', 'pouchDB'];
-    function TasksController($q, $filter, $timeout, $indexedDB, $mdDialog, $mdSidenav, taskService, pouchDB) {
+    TasksController.$inject = ['$q', '$filter', '$timeout', '$mdDialog', '$mdSidenav', 'taskService', 'pouchDB'];
+    function TasksController($q, $filter, $timeout, $mdDialog, $mdSidenav, taskService, pouchDB) {
         var vm = this;
 
         // View Variables
@@ -23,20 +23,26 @@
         vm.confirm       = confirm;
         vm.selected      = {};
 
-        vm.debug = function() {
-            // pouchDB.getInfo();
-            // console.log('pouchDB', pouchDB.getInfo());
+        vm.debug = function(arg) {
+            console.log('debug', arg);
         };
 
         ////////////
 
         function loadTasks() {
-            taskService.getAll().then(function(tasks) {
+            taskService.getAll(vm.filter).then(function(tasks) {
                 vm.tasks = tasks;
-                vm.filterTasks();
+
+                //check selected
+                var idx = _.findIndex(vm.tasks, function(task) {
+                        return task._id == vm.selected._id;
+                    });
+
+                //select task only if visible in list
+                if (idx >= 0) { vm.selected = vm.tasks[idx]; }
+                else          { vm.selected = {} }
             });
         }
-
         loadTasks();
 
 
@@ -52,8 +58,11 @@
             });
         }
 
+        /**
+         * Clear scoped tasks ('done' for now)
+         */
         function clearTasks() {
-            taskService.clearTasks().then(function() {
+            taskService.clearTasks('done').then(function() {
                 //update tasks list
                 loadTasks();
             });
@@ -82,22 +91,18 @@
             }
 
             if (typeof timeout !== 'undefined') {
+                vm.selected = task;
                 $timeout(function() {
                     saveFunc();
-                    if (vm.filter !== 'all') {
-                        vm.selected = {};
-                    }
                 }, 300);
             }
             else {
                 saveFunc();
-                vm.selected = task;
             }
         }
 
 
         function toggleSidebar() {
-            // var pending = $mdBottomSheet.hide() || $q.when(true);
             var pending = $q.when(true);
             pending.then(function(){
                 $mdSidenav('left').toggle();
@@ -109,29 +114,20 @@
          * Filter list of task according to selected tab
          */
         function filterTasks(filter) {
-            if (typeof filter !== 'undefined') {
-                vm.filter = filter;
-                vm.selected = {};
-            }
-
-            vm.filteredTasks = $filter('filter')(vm.tasks, function(task) {
-                if      (vm.filter == 'all')  { return true; }
-                else if (vm.filter == 'todo') { return !task.done; }
-                else if (vm.filter == 'done') { return task.done; }
-            });
+            vm.filter = filter;
+            loadTasks();
         }
 
 
         function isElem(elemName, event) {
-            // console.log("target", event);
             return elemName == event.target.localName;
         }
 
         function confirm(ev, cb) {
             // Appending dialog to document.body to cover sidenav in docs app
             var confirm = $mdDialog.confirm()
-                .title('Are tou sure ?')
-                .content('Do you really want to clear all the tasks ?')
+                .title('Are you sure ?')
+                .content('Do you really want to clear all the tasks marked as DONE ?')
                 .ariaLabel('Confirm choice')
                 .ok('YES')
                 .cancel('NO')
@@ -143,6 +139,7 @@
                 console.log('Action aborted');
             });
         }
+
 
     }
 })();
