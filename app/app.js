@@ -9,7 +9,7 @@
         .module('app', [
             'indexedDB',
             'ngMaterial',
-            'ngSanitize'
+            // 'ngSanitize'
             // 'ngAnimate'
         ])
         .config(AppConfig)
@@ -28,7 +28,7 @@
                     keyPath: 'id',
                     autoIncrement: true
                 });
-                objStore.createIndex('done', 'done', {unique: false});
+                // objStore.createIndex('done', 'done', {unique: false});
             });
 
         $mdIconProvider
