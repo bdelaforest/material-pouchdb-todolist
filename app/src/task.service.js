@@ -48,6 +48,7 @@
                 else {
                     var d = new Date();
                     task.createdAt = d.toISOString();
+                    task.done      = false;
                     store.insert(task).then(function() {
                         success();
                     },
@@ -72,8 +73,21 @@
 
             openStore(function(store) {
                 store.getAll().then(function(tasks) {
+                    console.log("tasks", tasks)
                     return deferred.resolve(tasks);
                 });
+
+                // store.count().then(function(val) {
+                //     console.log(val);
+                //     if (val > 0) {
+                //         store.findWhere(store.query().$index('done').$eq('true')).then(function(tasks) {
+                //         // store.find(2).then(function(tasks) {
+                //         store.getAll(filter).then(function(tasks) {
+                //             console.log("tasks", tasks)
+                //             return deferred.resolve(tasks);
+                //         });
+                //     }
+                // });
             });
 
             return deferred.promise;

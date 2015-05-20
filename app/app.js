@@ -8,7 +8,9 @@
     angular
         .module('app', [
             'indexedDB',
-            'ngMaterial'
+            'ngMaterial',
+            'ngSanitize'
+            // 'ngAnimate'
         ])
         .config(AppConfig)
         .constant('cfg', {
@@ -20,14 +22,13 @@
     function AppConfig($indexedDBProvider, $mdThemingProvider, $mdIconProvider, cfg) {
 
         $indexedDBProvider
-            .connection('appIndexedDB')
+            .connection('todos')
             .upgradeDatabase(1, function(event, db, tx){
                 var objStore = db.createObjectStore(cfg.storeName, {
                     keyPath: 'id',
                     autoIncrement: true
                 });
-                // objStore.createIndex('id_idx', 'id', {unique: true});
-                // objStore.createIndex('cat_idx', 'cat', {unique: false});
+                objStore.createIndex('done', 'done', {unique: false});
             });
 
         $mdIconProvider
@@ -35,7 +36,7 @@
 
         $mdThemingProvider.theme('default')
             // .primaryPalette('brown')
-            .accentPalette('brown');
+            .accentPalette('indigo');
 
     }
 

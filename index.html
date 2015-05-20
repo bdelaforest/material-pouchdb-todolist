@@ -8,20 +8,10 @@
     <meta name="viewport" content="width=device-width">
 
     <link rel="stylesheet" href="app/assets/app.css"/>
+    <link rel="stylesheet" href="app/assets/animate.css"/>
     <link rel="stylesheet" href="app/vendor/angular-material/angular-material.min.css">
 
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
-
-    <script src="app/vendor/angular/angular.js"></script>
-    <script src="app/vendor/angular-animate/angular-animate.min.js"></script>
-    <script src="app/vendor/angular-aria/angular-aria.min.js"></script>
-    <script src="app/vendor/angular-material/angular-material.min.js"></script>
-    <script src="app/vendor/angular-indexed-db/angular-indexed-db.js"></script>
-
-    <script src="app/app.js"></script>
-    <script src="app/src/task.service.js"></script>
-    <script src="app/src/dialog.controller.js"></script>
-    <script src="app/src/main.controller.js"></script>
 </head>
 <body ng-app="app" layout="column" ng-controller="MainController as vm" ng-cloak>
 
@@ -37,39 +27,72 @@
     </md-toolbar>
 
     <div flex layout="row">
-
-        <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left">
-            <md-list>
-                <md-list-item class="task-list-item"
-                        ng-repeat="task in vm.tasks | orderBy:'createdAt':true track by $index"
-                        ng-class="{'active' : task === vm.selected }"
+        <!-- ng-click="vm.isElem('span', $event) && (vm.selected = {})" -->
+        <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left"
+                layout="column"
+                ng-click="vm.isElem('span', $event) && (vm.selected = {})">
+            <md-tabs md-stretch-tabs="always">
+                <md-tab flex label="ALL" md-on-select="vm.filterTasks('all');"></md-tab>
+                <md-tab flex label="TODO" md-on-select="vm.filterTasks('todo');"></md-tab>
+                <md-tab flex label="DONE" md-on-select="vm.filterTasks('done');"></md-tab>
+            </md-tabs>
+            <md-divider></md-divider>
+            <div flex ng-show="!vm.filteredTasks.length" class="watermark center">
+                <h2 class="md-subhead">No task found</h2>
+            </div>
+            <md-list flex>
+                <md-list-item class="task-list-item appear sample-show-hide"
+                        ng-repeat="task in vm.filteredTasks |
+                            orderBy:'createdAt':true track by $index"
+                        ng-class="{'active' : task.id === vm.selected.id,
+                                   'done' : task.done}"
                         ng-click="vm.selectTask(task)">
+
                     <div class="md-list-item-text">
-                        {{task.title}}
+                        {{::task.title}}
                     </div>
                     <span flex></span>
                     <md-checkbox class="md-secondary"
                         ng-model="task.done"
-                        ng-change="vm.save(task)">
+                        ng-change="vm.save(task, true)">
                         <md-tooltip md-direction="right">Is task done ?</md-tooltip>
                     </md-checkbox>
-                    <!-- <md-divider></md-divider> -->
                 </md-list-item>
             </md-list>
+            <md-button ng-click="vm.confirm($event, vm.clearTasks)">Clear tasks</md-button>
         </md-sidenav>
 
         <md-content flex id="content">
-            <div ng-show="!vm.selected">
-                <h2 class="md-display-1 watermark">No task selected</h2>
+            <div ng-show="!vm.selected.id">
+                <h2 class="md-display-1 watermark light">No task selected</h2>
             </div>
-            <div ng-show="vm.selected">
-                <h2 class="md-headline">{{vm.selected.title}}</h2>
-                <p class="md-body-1">{{vm.selected.body}}</p>
+            <div ng-show="vm.selected.id" layout="column">
+                <div layout="row">
+                    <h1 class="md-headline">{{vm.selected.title}}</h1>
+                    <span flex></span>
+                     <md-switch class="md-primary" md-no-ink aria-label="Set done"
+                            ng-model="vm.selected.done"
+                            ng-change="vm.save(vm.selected)">
+                        <span ng-show="!vm.selected.done" >TODO</span>
+                        <span ng-show="vm.selected.done" >DONE</span>
+                    </md-switch>
+                </div>
+                <p class="md-body-1 pre">{{vm.selected.body}}</p>
             </div>
         </md-content>
 
     </div>
 
+    <script src="app/vendor/angular/angular.js"></script>
+    <script src="app/vendor/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="app/vendor/angular-animate/angular-animate.min.js"></script>
+    <script src="app/vendor/angular-aria/angular-aria.min.js"></script>
+    <script src="app/vendor/angular-material/angular-material.min.js"></script>
+    <script src="app/vendor/angular-indexed-db/angular-indexed-db.js"></script>
 
+    <script src="app/app.js"></script>
+    <script src="app/src/task.service.js"></script>
+    <script src="app/src/dialog.controller.js"></script>
+    <script src="app/src/main.controller.js"></script>
 </body>
 </html>

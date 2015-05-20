@@ -15,18 +15,53 @@
   display: none !important;
 }
 
-.watermark {
-  opacity: .1;
-  /*text-align: center;*/
+.pre {
+  white-space: pre;
 }
+.center {
+  text-align: center;
+}
+.watermark {
+  opacity: .2;
+}
+.watermark.light {
+  opacity: .1;
+}
+
 
 .task-list-item  {
   border-left: 0;
-  transition: border 100ms ease-out 30ms;
+  /*transition: all 100ms ease-out;*/
 }
 .task-list-item.active  {
-  border-left: 5px solid rgba(188,170,164,0.87);
+  border-left: 4px solid #5C6BC0;
+  z-index: 10;
 }
+
+/*.task-list-item .md-list-item-text,
+.task-list-item md-checkbox {
+ -webkit-transition: 100ms ease-out all;
+  transition: 100ms ease-out all;
+  }*/
+.task-list-item.done .md-list-item-text {
+  text-decoration: line-through;
+}
+.task-list-item.done .md-list-item-text,
+.task-list-item.done md-checkbox {
+  opacity: .3;
+}
+
+
+.animate-enter {
+  -webkit-transition: 1s ease-out all;
+  transition: 1s ease-out all;
+  opacity: 0;
+}
+
+.animate-enter.animate-enter-active {
+  opacity: 1;
+}
+
 
 
 
