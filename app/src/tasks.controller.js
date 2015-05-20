@@ -3,27 +3,29 @@
 
     angular
         .module('app')
-        .controller('MainController', MainController);
+        .controller('TasksController', TasksController);
 
-    MainController.$inject = ['$q', '$filter', '$timeout', '$indexedDB', '$mdDialog', '$mdSidenav', 'taskService'];
-    function MainController($q, $filter, $timeout, $indexedDB, $mdDialog, $mdSidenav, taskService) {
+    TasksController.$inject = ['$q', '$filter', '$timeout', '$indexedDB', '$mdDialog', '$mdSidenav', 'taskService', 'pouchDB'];
+    function TasksController($q, $filter, $timeout, $indexedDB, $mdDialog, $mdSidenav, taskService, pouchDB) {
         var vm = this;
-        vm.tasks = [];
+
+        // View Variables
+        vm.tasks         = [];
         vm.filteredTasks = [];
-        vm.filter = 'all';
-        vm.selectTask = selectTask;
-        vm.clearTasks = clearTasks;
-        vm.showForm = showForm;
-        vm.save = save;
+        vm.filter        = 'all';
+        vm.selectTask    = selectTask;
+        vm.clearTasks    = clearTasks;
+        vm.showForm      = showForm;
+        vm.save          = save;
         vm.toggleSidebar = toggleSidebar;
-        vm.filterTasks = filterTasks;
-        vm.isElem = isElem;
-        vm.confirm = confirm;
-        // vm.newtask = {};
-        vm.selected = {};
+        vm.filterTasks   = filterTasks;
+        vm.isElem        = isElem;
+        vm.confirm       = confirm;
+        vm.selected      = {};
 
         vm.debug = function() {
-            console.log('vm.filter', vm.filter);
+            // pouchDB.getInfo();
+            // console.log('pouchDB', pouchDB.getInfo());
         };
 
         ////////////
@@ -130,7 +132,6 @@
             var confirm = $mdDialog.confirm()
                 .title('Are tou sure ?')
                 .content('Do you really want to clear all the tasks ?')
-                // .content('All of the banks have agreed to forgive you your debts.')
                 .ariaLabel('Confirm choice')
                 .ok('YES')
                 .cancel('NO')

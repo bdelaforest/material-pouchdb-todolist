@@ -9,12 +9,14 @@
         .module('app', [
             'indexedDB',
             'ngMaterial',
+            'pouchDB',
             // 'ngSanitize'
             // 'ngAnimate'
         ])
         .config(AppConfig)
         .constant('cfg', {
-            'storeName': 'task'
+            'storeName': 'task',
+            'pouchDBName': 'tasks'
         });
 
 
@@ -38,6 +40,8 @@
             // .primaryPalette('brown')
             .accentPalette('indigo');
 
+
+        // pouchDB.init();
     }
 
 })();

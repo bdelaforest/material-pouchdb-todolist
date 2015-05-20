@@ -6,8 +6,8 @@
         .factory('taskService', TaskService);
 
 
-    TaskService.$inject = ['$indexedDB', '$q', 'cfg'];
-    function TaskService($indexedDB, $q, cfg) {
+    TaskService.$inject = ['$indexedDB', '$q', 'cfg', 'pouchDB'];
+    function TaskService($indexedDB, $q, cfg, pouchDB) {
 
         var service = {
             save:   save,
@@ -26,83 +26,65 @@
 
         function save(task) {
             var deferred = $q.defer();
-            console.log('save', task);
 
-            function success() {
-                console.log('After insert success', task);
-                deferred.resolve();
+            //promise callbacks
+            function success(response) {
+                console.log('After insert success', response);
+                deferred.resolve(response);
             }
 
-            openStore(function(store) {
+            function error(err) {
+                console.log('After insert error', err);
+            }
 
-                console.log('Before insert ', task);
 
-                if (task.id) {
-                    store.upsert(task).then(function() {
-                        success();
-                    },
-                    function(err) {
-                        console.log('After insert error', err);
-                    });
-                }
-                else {
-                    var d = new Date();
-                    task.createdAt = d.toISOString();
-                    task.done      = false;
-                    store.insert(task).then(function() {
-                        success();
-                    },
-                    function(err) {
-                        console.log('After insert error', err);
-                    });
-                }
+            if (task._id) {
+                pouchDB.put(task).then(success, error);
+            }
+            else {
+                task.createdAt = d.toISOString();
+                task.done      = false;
 
-            })
+                pouchDB.post(task).then(success, error);
+            }
 
             return deferred.promise;
         }
 
 
         function getOne(id) {
-            return null;
+            return pouchDB.get(id);
         }
 
 
-        function getAll() {
-            var deferred = $q.defer();
+        function getAll(filter) {
+            var status = '';
 
-            openStore(function(store) {
-                store.getAll().then(function(tasks) {
-                    console.log("tasks", tasks)
-                    return deferred.resolve(tasks);
-                });
+            console.log("filter", pouchDB);
 
-                // store.count().then(function(val) {
-                //     console.log(val);
-                //     if (val > 0) {
-                //         store.findWhere(store.query().$index('done').$eq('true')).then(function(tasks) {
-                //         // store.find(2).then(function(tasks) {
-                //         store.getAll(filter).then(function(tasks) {
-                //             console.log("tasks", tasks)
-                //             return deferred.resolve(tasks);
-                //         });
-                //     }
-                // });
+            if (typeof filter === 'undefined' || filter === 'all') {
+                return pouchDB.allDocs();
+            }
+
+            else if (filter === 'todo') { status = false; }
+            else if (filter === 'done') { status = true; }
+
+            return pouchDB.query(function(doc, emit) {
+                if (doc.done === status) { emit(doc); }
             });
-
-            return deferred.promise;
         }
 
         function clearTasks() {
-            var deferred = $q.defer();
+            return pouchDB.destroy();
+            // var deferred = $q.defer();
 
-            openStore(function(store) {
-                store.clear().then(function() {
-                    return deferred.resolve();
-                });
-            });
+            // openStore(function(store) {
+            //     store.clear().then(function() {
+            //         return deferred.resolve();
+            //     });
+            // });
 
-            return deferred.promise;
+            // return deferred.promise;
         }
     }
 

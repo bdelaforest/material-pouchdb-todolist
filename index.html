@@ -13,7 +13,7 @@
 
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
 </head>
-<body ng-app="app" layout="column" ng-controller="MainController as vm" ng-cloak>
+<body ng-app="app" layout="column" ng-controller="TasksController as vm" ng-cloak>
 
     <md-toolbar layout="row" class="md-whiteframe-z1 md-toolbar-tools">
         <md-button class="menu" hide-gt-sm ng-click="vm.toggleSidebar()" aria-label="Show Task List">
@@ -79,6 +79,8 @@
                 </div>
                 <p class="md-body-1 pre">{{vm.selected.body}}</p>
             </div>
+
+            <button ng-click="vm.debug()">DEBUG</button>
         </md-content>
 
     </div>
@@ -89,10 +91,12 @@
     <script src="app/vendor/angular-aria/angular-aria.min.js"></script>
     <script src="app/vendor/angular-material/angular-material.min.js"></script>
     <script src="app/vendor/angular-indexed-db/angular-indexed-db.js"></script>
+    <script src="app/vendor/pouchdb/dist/pouchdb.min.js"></script>
 
     <script src="app/app.js"></script>
     <script src="app/src/task.service.js"></script>
+    <script src="app/src/tasks.controller.js"></script>
+    <script src="app/src/pouchDB.service.js"></script>
     <script src="app/src/dialog.controller.js"></script>
-    <script src="app/src/main.controller.js"></script>
 </body>
 </html>
