@@ -72,7 +72,7 @@
             $mdDialog.show({
                 controller: 'DialogController',
                 controllerAs: 'vm',
-                templateUrl: 'app/newTaskForm.tpl.html',
+                templateUrl: 'app/dialog.task.tpl.html',
                 targetEvent: ev,
             })
             .then(function(task) {

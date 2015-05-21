@@ -1,0 +1,26 @@
+<md-dialog aria-label="New Task Form" flex="50">
+    <form>
+        <md-dialog-content>
+            <h2 class="md-headline"><center>New Task</center></h2>
+
+            <md-input-container>
+                <label>Title</label>
+                <input ng-model="vm.task.title" required>
+            </md-input-container>
+
+            <md-input-container flex>
+                <label>Description</label>
+                <textarea ng-model="vm.task.body" rows="4" required></textarea>
+            </md-input-container>
+        </md-dialog-content>
+
+        <div class="md-actions" layout="row">
+            <md-button ng-click="vm.success(vm.task)" type="submit" class="md-primary">
+                Save
+            </md-button>
+            <md-button ng-click="vm.cancel()" class="md-primary">
+                Cancel
+            </md-button>
+        </div>
+    </form>
+</md-dialog>

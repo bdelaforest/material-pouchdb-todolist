@@ -36,7 +36,7 @@ var cfg = {
         icons:   'assets/svg',
         index:   'index.html.css',
         js:      'app/app.min.js',
-        tpl:     'app/templates.min.js',
+        // tpl:     'app/templates.min.js',
         css:     'app/app.min.css',
         vendors: 'app/vendors.min.js',
     }
@@ -84,11 +84,11 @@ gulp.task('build-vendors', ['clean'], function() {
         .pipe(gulp.dest(cfg.dist.dir));
 });
 
-gulp.task('build-js-templates', ['clean'], function() {
+gulp.task('copy-templates', ['clean'], function() {
     return gulp.src(cfg.src.templates)
-        .pipe(ghtml2js({moduleName: 'app'}))
-        .pipe(gconcat(cfg.dist.tpl))
-        .pipe(gulp.dest(cfg.dist.dir));
+        // .pipe(ghtml2js({moduleName: 'app'}))
+        // .pipe(gconcat(cfg.dist.tpl))
+        .pipe(gulp.dest(cfg.dist.dir+'/app'));
 });
 
 gulp.task('copy-icons', ['clean'], function() {
@@ -100,7 +100,7 @@ gulp.task('copy-icons', ['clean'], function() {
 /**
  * Main task
  */
-gulp.task('build', ['clean', 'build-css', 'build-js', 'build-vendors', 'build-js-templates', 'copy-icons'], function() {
+gulp.task('build', ['clean', 'build-css', 'build-js', 'build-vendors', 'copy-templates', 'copy-icons'], function() {
     return gulp.src(cfg.src.index)
         .pipe(gulp.dest(cfg.dist.dir));
 });
