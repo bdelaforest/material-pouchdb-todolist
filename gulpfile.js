@@ -5,43 +5,43 @@ var gulp        = require('gulp'),
     grename     = require('gulp-rename'),
     guglify     = require('gulp-uglify'),
     gclean      = require('gulp-clean'),
-    gngannot    = require('gulp-ng-annotate'),
+    // gngannot    = require('gulp-ng-annotate'),
     gless       = require('gulp-less'),
     gminifyCSS  = require('gulp-minify-css'),
     // gclosure    = require('gulp-jsclosure'),
     glivereload = require('gulp-livereload'),
-    ghtml2js    = require('gulp-ng-html2js'),
-    karma       = require('gulp-karma');
+    ghtml2js    = require('gulp-ng-html2js');
+    // karma       = require('gulp-karma');
 
 
 var cfg = {
     src: {
-        assets: 'src/assets/svg',
+        icons: 'src/assets/svg/**/*',
         index: 'src/index.html',
-        templates: 'src/app/**/*.tpl.html'
+        templates: 'src/app/**/*.tpl.html',
         scripts: ['src/app/**/*.js'],
         less: 'src/assets/less/app.less',
         vendors: [
-            'src/app/vendor/angular/angular.js',
-            'src/app/vendor/angular-sanitize/angular-sanitize.min.js',
-            'src/app/vendor/angular-animate/angular-animate.min.js',
-            'src/app/vendor/angular-aria/angular-aria.min.js',
-            'src/app/vendor/angular-material/angular-material.min.js',
-            'src/app/vendor/angular-indexed-db/angular-indexed-db.js',
-            'src/app/vendor/pouchdb/dist/pouchdb.min.js',
-            'src/app/vendor/lodash/lodash.min.js',
+            'src/vendor/angular/angular.js',
+            'src/vendor/angular-sanitize/angular-sanitize.min.js',
+            'src/vendor/angular-animate/angular-animate.min.js',
+            'src/vendor/angular-aria/angular-aria.min.js',
+            'src/vendor/angular-material/angular-material.min.js',
+            'src/vendor/angular-indexed-db/angular-indexed-db.js',
+            'src/vendor/pouchdb/dist/pouchdb.min.js',
+            'src/vendor/lodash/lodash.min.js',
         ],
     },
     dist: {
         dir:  'dist',
+        icons:   'assets/svg',
         index:   'index.html.css',
-        js:      'app.min.js',
-        css:     'app.min.css',
-        vendors: 'vendors.min.js',
+        js:      'app/app.min.js',
+        tpl:     'app/templates.min.js',
+        css:     'app/app.min.css',
+        vendors: 'app/vendors.min.js',
     }
 };
-
-
 
 
 /**
@@ -67,11 +67,9 @@ gulp.task('build-css', ['clean'], function() {
 /**
  * Build scripts
  */
-gulp.task('build-js', ['clean'], function() {
-    return gulp.src(cfg.src.js)
-        .pipe(gjshint())
-        .pipe(gjshint.reporter())
-        .pipe(guglify({mangle: false}))
+gulp.task('build-js', ['clean', 'build-js-templates'], function() {
+    return gulp.src(cfg.src.scripts)
+        .pipe(gconcat(cfg.dist.dir+'/'+cfg.dist.tpl))
         .pipe(grename(cfg.dist.js))
         .pipe(gulp.dest(cfg.dist.dir));
 });
@@ -81,9 +79,19 @@ gulp.task('build-js', ['clean'], function() {
  * Build scripts
  */
 gulp.task('build-vendors', ['clean'], function() {
-    return gulp.src(cfg.src.index)
+    return gulp.src(cfg.src.vendors)
+        .pipe(guglify({mangle: false}))
+        .pipe(grename(cfg.dist.vendors))
         .pipe(gulp.dest(cfg.dist.dir));
 });
+
+gulp.task('build-js-templates', ['clean'], function() {
+    return gulp.src(cfg.src.templates)
+        .pipe(ghtml2js({moduleName: 'app'}))
+        .pipe(grename(cfg.dist.tpl))
+        .pipe(gulp.dest(cfg.dist.dir));
+});
+
 
 // /**
 //  * Build scripts
@@ -96,9 +104,9 @@ gulp.task('build-vendors', ['clean'], function() {
 // });
 
 
-gulp.task('copy-assets', ['clean'], function() {
-    return gulp.src(cfg.src.assets)
-        .pipe(gulp.dest(cfg.dist.dir));
+gulp.task('copy-icons', ['clean'], function() {
+    return gulp.src(cfg.src.icons)
+        .pipe(gulp.dest(cfg.dist.dir+'/'+cfg.dist.icons));
 });
 
 
@@ -106,10 +114,8 @@ gulp.task('copy-assets', ['clean'], function() {
 /**
  * Main task
  */
-gulp.task('build', ['clean', 'build-css', 'build-js', 'build-vendors', 'copy-assets'], function() {
-    return gulp.src(cfg.src.vendors)
-        .pipe(guglify({mangle: false}))
-        .pipe(grename(cfg.dist.vendors))
+gulp.task('build', ['clean', 'build-css', 'build-js', 'build-vendors', 'copy-icons'], function() {
+    return gulp.src(cfg.src.index)
         .pipe(gulp.dest(cfg.dist.dir));
 });
 
