@@ -7,11 +7,9 @@
 
     angular
         .module('app', [
-            'indexedDB',
             'ngMaterial',
             'pouchDB',
             // 'ngSanitize'
-            // 'ngAnimate'
         ])
         .filter('nl2br', nl2br)
         .config(AppConfig)
@@ -23,27 +21,15 @@
         });
 
 
-    AppConfig.$inject = ['$indexedDBProvider', '$mdThemingProvider', '$mdIconProvider', 'cfg'];
-    function AppConfig($indexedDBProvider, $mdThemingProvider, $mdIconProvider, cfg) {
-
-        // $indexedDBProvider
-        //     .connection('todos')
-        //     .upgradeDatabase(1, function(event, db, tx){
-        //         var objStore = db.createObjectStore(cfg.storeName, {
-        //             keyPath: 'id',
-        //             autoIncrement: true
-        //         });
-        //         // objStore.createIndex('done', 'done', {unique: false});
-        //     });
+    AppConfig.$inject = ['$mdThemingProvider', '$mdIconProvider', 'cfg'];
+    function AppConfig($mdThemingProvider, $mdIconProvider, cfg) {
 
         $mdIconProvider
-            .icon("menu", "app/assets/svg/menu.svg", 24);
+            .icon("menu", "assets/svg/menu.svg", 24);
 
         $mdThemingProvider.theme('default')
             .primaryPalette('indigo')
             .accentPalette('blue');
-
-        // pouchDB.init();
     }
 
     nl2br.$inject = ['$sce'];

@@ -6,8 +6,8 @@
         .factory('taskService', TaskService);
 
 
-    TaskService.$inject = ['$indexedDB', '$q', 'cfg', 'pouchDB'];
-    function TaskService($indexedDB, $q, cfg, pouchDB) {
+    TaskService.$inject = ['$q', 'cfg', 'pouchDB'];
+    function TaskService($q, cfg, pouchDB) {
 
         var service = {
             save:   save,

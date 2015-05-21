@@ -23,13 +23,12 @@ var cfg = {
         less: 'src/assets/less/app.less',
         vendors: [
             'src/vendor/angular/angular.js',
-            'src/vendor/angular-sanitize/angular-sanitize.min.js',
-            'src/vendor/angular-animate/angular-animate.min.js',
-            'src/vendor/angular-aria/angular-aria.min.js',
-            'src/vendor/angular-material/angular-material.min.js',
-            'src/vendor/angular-indexed-db/angular-indexed-db.js',
-            'src/vendor/pouchdb/dist/pouchdb.min.js',
-            'src/vendor/lodash/lodash.min.js',
+            'src/vendor/angular-sanitize/angular-sanitize.js',
+            'src/vendor/angular-animate/angular-animate.js',
+            'src/vendor/angular-aria/angular-aria.js',
+            'src/vendor/angular-material/angular-material.js',
+            'src/vendor/pouchdb/dist/pouchdb.js',
+            'src/vendor/lodash/lodash.js',
         ],
     },
     dist: {
@@ -67,10 +66,10 @@ gulp.task('build-css', ['clean'], function() {
 /**
  * Build scripts
  */
-gulp.task('build-js', ['clean', 'build-js-templates'], function() {
+gulp.task('build-js', ['clean'], function() {
     return gulp.src(cfg.src.scripts)
-        .pipe(gconcat(cfg.dist.dir+'/'+cfg.dist.tpl))
-        .pipe(grename(cfg.dist.js))
+        .pipe(guglify({mangle: false}))
+        .pipe(gconcat(cfg.dist.js))
         .pipe(gulp.dest(cfg.dist.dir));
 });
 
@@ -81,28 +80,16 @@ gulp.task('build-js', ['clean', 'build-js-templates'], function() {
 gulp.task('build-vendors', ['clean'], function() {
     return gulp.src(cfg.src.vendors)
         .pipe(guglify({mangle: false}))
-        .pipe(grename(cfg.dist.vendors))
+        .pipe(gconcat(cfg.dist.vendors))
         .pipe(gulp.dest(cfg.dist.dir));
 });
 
 gulp.task('build-js-templates', ['clean'], function() {
     return gulp.src(cfg.src.templates)
         .pipe(ghtml2js({moduleName: 'app'}))
-        .pipe(grename(cfg.dist.tpl))
+        .pipe(gconcat(cfg.dist.tpl))
         .pipe(gulp.dest(cfg.dist.dir));
 });
-
-
-// /**
-//  * Build scripts
-//  */
-// gulp.task('copy-index', ['clean'], function() {
-//     return gulp.src(cfg.src.vendors)
-//         .pipe(guglify({mangle: false}))
-//         .pipe(grename(cfg.dist.vendors))
-//         .pipe(gulp.dest(cfg.dist.dir));
-// });
-
 
 gulp.task('copy-icons', ['clean'], function() {
     return gulp.src(cfg.src.icons)
@@ -110,27 +97,13 @@ gulp.task('copy-icons', ['clean'], function() {
 });
 
 
-
 /**
  * Main task
  */
-gulp.task('build', ['clean', 'build-css', 'build-js', 'build-vendors', 'copy-icons'], function() {
+gulp.task('build', ['clean', 'build-css', 'build-js', 'build-vendors', 'build-js-templates', 'copy-icons'], function() {
     return gulp.src(cfg.src.index)
         .pipe(gulp.dest(cfg.dist.dir));
 });
-
-
-// /*
-//  * TASKS TO BE CALLED BY USER
-//  */
-// gulp.task('watch', function() {
-//     gulp.watch(cfg.src.lessFiles, ['build']);
-//     gulp.watch(cfg.src.index,     ['build']);
-//     gulp.watch(cfg.src.pages,     ['build']);
-//     gulp.watch(cfg.src.js,        ['build']);
-// });
-// gulp.task('default', ['build', 'watch']);
-
 
 gulp.task('default', ['build']);
 
