@@ -32,9 +32,18 @@
                 <md-tab flex label="DONE" md-on-select="vm.filterTasks('done')"></md-tab>
             </md-tabs>
             <md-divider></md-divider>
-            <div flex ng-show="!vm.tasks.length" class="watermark center">
+
+            <div layout="row" layout-sm="column" layout-align="space-around"
+                    ng-show="vm.loading">
+                <md-progress-circular class="tasks-loader md-accent"
+                    md-mode="indeterminate" md-diameter="30">
+                </md-progress-circular>
+            </div>
+
+            <div flex ng-show="!vm.loading && !vm.tasks.length" class="watermark center">
                 <h2 class="md-subhead">No task found</h2>
             </div>
+
             <md-list flex>
                 <md-list-item class="task-list-item"
                         ng-repeat="task in vm.tasks |

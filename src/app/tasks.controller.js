@@ -5,8 +5,8 @@
         .module('app')
         .controller('TasksController', TasksController);
 
-    TasksController.$inject = ['$q', '$filter', '$timeout', '$mdDialog', '$mdSidenav', 'taskService', 'pouchDB'];
-    function TasksController($q, $filter, $timeout, $mdDialog, $mdSidenav, taskService, pouchDB) {
+    TasksController.$inject = ['$scope', '$q', '$filter', '$timeout', '$mdDialog', '$mdSidenav', 'taskService', 'pouchDB'];
+    function TasksController($scope, $q, $filter, $timeout, $mdDialog, $mdSidenav, taskService, pouchDB) {
         var vm = this;
 
         // View Variables
@@ -21,6 +21,7 @@
         vm.filterTasks   = filterTasks;
         vm.isElem        = isElem;
         vm.confirm       = confirm;
+        vm.loading       = false;
         vm.selected      = {};
 
         vm.debug = function(arg) {
@@ -30,6 +31,8 @@
         ////////////
 
         function loadTasks() {
+            var deferred = $q.defer();
+
             taskService.getAll(vm.filter).then(function(tasks) {
                 vm.tasks = tasks;
 
@@ -41,9 +44,54 @@
                 //select task only if visible in list
                 if (idx >= 0) { vm.selected = vm.tasks[idx]; }
                 else          { vm.selected = {} }
+
+                deferred.resolve(tasks);
             });
+
+            return deferred.promise;
         }
+
+
+
+        // pouchDB.sync.on('change', function (info) {
+        //   // handle change
+        //     console.log("change");
+        // }).on('paused', function () {
+        //   // replication paused (e.g. user went offline)
+        //     console.log("paused");
+        // }).on('active', function () {
+        //   // replicate resumed (e.g. user went back online)
+        //     vm.loader = true;
+        //     console.log("active");
+        //     $rootScope.$digest();
+        // }).on('denied', function (info) {
+        //   // a document failed to replicate, e.g. due to permissions
+        //     console.log("denied");
+        // }).on('complete', function (info) {
+        //   // handle complete
+        //     vm.loader = false;
+        //     loadTasks();
+        //     console.log("complete");
+        //     $rootScope.$digest();
+        // }).on('error', function (err) {
+        //   // handle error
+        //     console.log("error");
+        // });
+
+
+
+        //loadTasks first change (to load tasks after sync end)
+        pouchDB.sync
+            .on('active', function() {
+                vm.loading = true;
+                $scope.$apply();
+            })
+            .on('complete', function() {
+                vm.loading = false;
+                loadTasks();
+            });
         loadTasks();
+
 
 
         /**

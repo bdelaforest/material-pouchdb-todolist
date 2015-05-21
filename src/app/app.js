@@ -9,7 +9,6 @@
         .module('app', [
             'ngMaterial',
             'pouchDB',
-            // 'ngSanitize'
         ])
         .filter('nl2br', nl2br)
         .config(AppConfig)

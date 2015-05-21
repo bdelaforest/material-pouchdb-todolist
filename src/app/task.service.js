@@ -16,6 +16,8 @@
             clearTasks: clearTasks
         };
 
+        var db = pouchDB.db;
+
         return service;
 
         ////////////
@@ -38,7 +40,7 @@
                 task.done      = false;
             }
 
-            pouchDB.put(task)
+            db.put(task)
                 .then(success)
                 .catch(error);
 
@@ -47,7 +49,7 @@
 
 
         function getOne(id) {
-            return pouchDB.get(id);
+            return db.get(id);
         }
 
         function getAll(filter) {
@@ -68,7 +70,7 @@
 
 
             if (typeof filter === 'undefined' || filter === 'all') {
-                pouchDB.allDocs(options)
+                db.allDocs(options)
                     .then(success)
                     .catch(error);
             }
@@ -76,7 +78,7 @@
                 if      (filter === 'todo') { status = false; }
                 else if (filter === 'done') { status = true; }
 
-                pouchDB.query(function (doc, emit) {
+                db.query(function (doc, emit) {
                     if (doc.done === status) { emit(doc); }
                 }, options)
                     .then(success)
@@ -93,7 +95,7 @@
                 _.each(tasks, function(task, i) {
                     tasks[i]._deleted = true;
                 });
-                pouchDB.bulkDocs(tasks).then(function(result) {
+                db.bulkDocs(tasks).then(function(result) {
                     deferred.resolve(result);
                 });
             });

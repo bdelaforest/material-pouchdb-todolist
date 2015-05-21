@@ -105,7 +105,24 @@ gulp.task('build', ['clean', 'build-css', 'build-js', 'build-vendors', 'copy-tem
         .pipe(gulp.dest(cfg.dist.dir));
 });
 
+
+/*
+ * TASKS TO BE CALLED BY USER
+ */
 gulp.task('default', ['build']);
+gulp.task('watch',   ['build'], function() {
+    glivereload.listen();
+    gulp.watch([
+            'src/**/*.html',
+            cfg.src.scripts,
+            'src/**/*.less',
+        ],
+        ['build']);
+});
+
+
+
+// gulp.task('default', ['build']);
 
 
 // Handle the error
