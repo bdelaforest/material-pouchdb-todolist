@@ -13,6 +13,11 @@
             auto_compaction: true
         });
 
+        //compact remote db
+        new PouchDB(remoteDB).compact().then(function(info) {
+            console.log("Remote DB compacted !!", info);
+        });
+
         // Replicate DB if needed
         var sync = db.replicate.from(remoteDB);
 

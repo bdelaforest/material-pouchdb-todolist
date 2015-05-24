@@ -65,7 +65,7 @@
                 deferred.resolve(tasks);
             }
             function error(err) {
-                console.log('Error', err)
+                console.log('Error', err);
             }
 
 

@@ -33,12 +33,13 @@
             </md-tabs>
             <md-divider></md-divider>
 
-            <div layout="row" layout-sm="column" layout-align="space-around"
-                    ng-show="vm.loading">
-                <md-progress-circular class="tasks-loader md-accent"
+            <div ng-show="vm.loading" class="loader-container">
+                <md-progress-circular class="md-accent"
                     md-mode="indeterminate" md-diameter="30">
                 </md-progress-circular>
+                <span flex class="md-caption watermark">Replicating DB...</span>
             </div>
+
 
             <div flex ng-show="!vm.loading && !vm.tasks.length" class="watermark center">
                 <h2 class="md-subhead">No task found</h2>
@@ -82,7 +83,9 @@
                         <span ng-show="vm.selected.done" >DONE</span>
                     </md-switch>
                 </div>
-                <p class="md-body-1" ng-bind-html="vm.selected.body | nl2br"></p>
+                <div>
+                    <p class="md-body-1" ng-bind-html="vm.selected.body | nl2br"></p>
+                </div>
             </div>
         </md-content>
 

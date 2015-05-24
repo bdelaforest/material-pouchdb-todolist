@@ -13,7 +13,6 @@
         .filter('nl2br', nl2br)
         .config(AppConfig)
         .constant('cfg', {
-            'storeName': 'task',
             'pouchDBName': 'tasks',
             'pouchDBRemote': 'https://bdelaforest.iriscouch.com/',
             // 'pouchDBRemote': 'http://localhost:5984/'
