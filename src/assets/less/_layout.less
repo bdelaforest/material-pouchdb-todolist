@@ -1,129 +1,109 @@
-/**
- * ng-cloack rules
- */
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-  display: none !important;
-}
-
-.center {
-  text-align: center;
-}
-.watermark {
-  opacity: .2;
-}
-.watermark.light {
-  opacity: .1;
-}
-
-
-.task-list-item  {
-  border-left: 0;
-  /*transition: all 100ms ease-out;*/
-}
-.task-list-item.active  {
-  border-left: 4px solid #5C6BC0;
-  z-index: 10;
-}
-
-/*.task-list-item .md-list-item-text,
-.task-list-item md-checkbox {
- -webkit-transition: 100ms ease-out all;
-  transition: 100ms ease-out all;
-  }*/
-.task-list-item.done .md-list-item-text {
-  text-decoration: line-through;
-}
-.task-list-item.done .md-list-item-text,
-.task-list-item.done md-checkbox {
-  opacity: .3;
-}
-
-
-.animate-enter {
-  -webkit-transition: 1s ease-out all;
-  transition: 1s ease-out all;
-  opacity: 0;
-}
-
-.animate-enter.animate-enter-active {
-  opacity: 1;
-}
-
-
+@primary-color: #5C6BC0;
 
 html, body {
-  font-family: 'Roboto', sans-serif;
-  font-size:14px;
-  height:100%;
-  margin: 0px;
-  padding: 0px;
+    font-family: 'Roboto', sans-serif;
+    font-size:14px;
+    height:100%;
+    margin: 0;
+    padding: 0;
 }
+
+
 
 /* Toolbar area */
 
 .menu {
-  background-color: transparent;
-  border: none;
-  height: 38px;
-  margin: 16px;
-  width: 36px;
+    background-color: transparent;
+    border: none;
+    height: 38px;
+    margin: 16px;
+    width: 36px;
 }
 
 md-toolbar h1 {
-  margin: auto;
+    margin: auto;
+    font-size: 1.250em;
+    font-weight: 400;
 }
+
 
 /* Sidenav area */
 
-md-list .md-button {
-  color: inherit;
-  font-weight: 500;
-  text-align: left;
-  width: 100%;
-}
-md-list .md-button.selected {
-  color: #03a9f4;
+md-sidenav md-list {
+    padding: 0px 0px 8px 0px;
 }
 
-md-sidenav md-list {
-  padding: 0px 0px 8px 0px;
+
+
+/* Utils */
+
+.center {
+    text-align: center;
 }
+.watermark {
+    opacity: .2;
+
+    &.light {
+        opacity: .1;
+    }
+}
+
+
+.task-list-item  {
+    border-left: 0;
+
+    &.active {
+        border-left: 4px solid @primary-color;
+        z-index: 10;
+    }
+
+    &.done {
+        .md-list-item-text {
+            text-decoration: line-through;
+        }
+
+        .md-list-item-text,
+        md-checkbox {
+            opacity: .3;
+        }
+    }
+}
+
+
 
 
 /* Primary content area */
 
 #content  {
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-top: 5px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 5px;
 }
 md-button.menuBtn > md-icon {
-  fill:white;
-  width:24px;
-  height:24px;
+    fill:white;
+    width:24px;
+    height:24px;
 }
 
-
-/* Utils */
-
-.content-wrapper {
-  position: relative;
-}
 
 /* Typography support coming in 0.8.0 */
 
-md-toolbar h1 {
-  font-size: 1.250em;
-  font-weight: 400;
-}
 
 .loader-container {
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 30px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
 
-  md-progress-circular {
-    margin-left: auto;
-    margin-right: auto;
-  }
+    md-progress-circular {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
+/**
+ * ng-cloack rules
+ */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
 }

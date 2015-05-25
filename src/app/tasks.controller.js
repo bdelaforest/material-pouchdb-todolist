@@ -131,22 +131,28 @@
 
         // function toggleState(task) {
         function save(task, timeout) {
-            function saveFunc() {
-                taskService.save(task).then(function() {
-                    //update tasks list
-                    loadTasks();
-                });
-            }
+            // function saveFunc() {
+            //     taskService.save(task).then(function() {
+            //         //update tasks list
+            //         loadTasks();
+            //     });
+            // }
 
-            if (typeof timeout !== 'undefined') {
-                vm.selected = task;
-                $timeout(function() {
-                    saveFunc();
-                }, 300);
-            }
-            else {
-                saveFunc();
-            }
+            // if (typeof timeout !== 'undefined') {
+            //     vm.selected = task;
+            //     $timeout(function() {
+            //         saveFunc();
+            //     }, 300);
+            // }
+            // else {
+            //     saveFunc();
+            // }
+
+
+            taskService.save(task).then(function() {
+                //update tasks list
+                loadTasks();
+            });
         }
 
 

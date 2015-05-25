@@ -1,0 +1,86 @@
+/* Animation */
+
+
+// // Declaring keyframes
+// .keyframes(enter, {
+//     from {
+//         opacity: 0;
+//         height: 0px;
+//         right: -70px;
+//     }
+//     75% {
+//         right: 15px;
+//     }
+//     to {
+//         opacity: 1;
+//         height: 30px;
+//         right: 0px;
+//     }
+// });
+
+// .keyframes(leave, {
+//     to {
+//         opacity: 0;
+//         height: 0px;
+//         right: -70px;
+//     }
+//     25% {
+//         right: 15px;
+//     }
+//     from {
+//         opacity: 1;
+//         height: 30px;
+//         right: 0px;
+//     }
+// });
+
+
+.animate {
+    min-height: 0;
+
+    &.ng-enter,
+    &.ng-leave,
+    &.ng-move {
+        .transition(350ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all);
+    }
+
+    // &.ng-enter-stagger,
+    // &.ng-leave-stagger,
+    // &.ng-move-stagger {
+    //     .transition-delay(150ms);
+    //     .transition-duration(0);
+    // }
+
+
+    &.ng-enter,
+    &.ng-move,
+    &.ng-leave.ng-leave-active {
+        // .scaleY(0);
+        // .translate3d(150px, 0, 0);
+        max-height: 0;
+        opacity: 0;
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active,
+    &.ng-move.ng-move-active {
+        // .scaleY(1);
+        // .translate3d(0, 0, 0);
+        max-height: 50px;
+        opacity: 1;
+    }
+}
+
+
+// .animate-enter {
+//     -webkit-animation: enter 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+//     animation: enter 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+//     display: block;
+//     position: relative;
+// }
+// .animate-leave {
+//     -webkit-animation: leave 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+//     animation: leave 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+//     display: block;
+//     position: relative;
+// }

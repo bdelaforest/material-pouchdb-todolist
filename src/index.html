@@ -41,14 +41,10 @@
             </div>
 
 
-            <div flex ng-show="!vm.loading && !vm.tasks.length" class="watermark center">
-                <h2 class="md-subhead">No task found</h2>
-            </div>
-
             <md-list flex>
-                <md-list-item class="task-list-item"
+                <md-list-item class="task-list-item animate"
                         ng-repeat="task in vm.tasks |
-                            orderBy:'createdAt':true track by $index"
+                            orderBy:'createdAt':true track by task._id"
                         ng-class="{'active' : task._id === vm.selected._id,
                                    'done' : task.done}"
                         ng-click="vm.selectTask(task)">
@@ -65,6 +61,11 @@
                     </md-checkbox>
                 </md-list-item>
             </md-list>
+
+            <div ng-show="!vm.loading && !vm.tasks.length" class="watermark center">
+                <h2 class="md-subhead">No task found</h2>
+            </div>
+
             <md-button ng-click="vm.confirm($event, vm.clearTasks)">Clear done tasks</md-button>
         </md-sidenav>
 
