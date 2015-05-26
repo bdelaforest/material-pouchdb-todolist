@@ -39,7 +39,6 @@
                 <span flex class="md-caption watermark">Replicating DB...</span>
             </div>
 
-
             <md-list flex>
                 <md-list-item class="task-list-item animate"
                         ng-repeat="task in vm.tasks |
@@ -73,16 +72,21 @@
                 <h2 class="md-display-1 watermark light">No task selected</h2>
             </div>
             <div ng-show="vm.selected._id" layout="column">
-                <div layout="row">
+                <section layout="row">
                     <h1 class="md-headline">{{vm.selected.title}}</h1>
                     <span flex></span>
-                     <md-switch class="md-secondary" md-no-ink aria-label="Set done"
+
+                    <md-switch class="md-secondary" aria-label="Set done"
                             ng-model="vm.selected.done"
                             ng-change="vm.save(vm.selected)">
                         <span ng-show="!vm.selected.done" >TODO</span>
                         <span ng-show="vm.selected.done" >DONE</span>
                     </md-switch>
-                </div>
+
+                    <md-button class="md-raised" aria-label="Edit Task"
+                            ng-click="vm.showForm($event, vm.selected)">Edit</md-button>
+
+                </section>
                 <div>
                     <p class="md-body-1" ng-bind-html="vm.selected.body | nl2br"></p>
                 </div>

@@ -116,12 +116,15 @@
             });
         }
 
-        function showForm(ev) {
+        function showForm(ev, target) {
             $mdDialog.show({
                 controller: 'DialogController',
                 controllerAs: 'vm',
                 templateUrl: 'app/dialog.task.tpl.html',
                 targetEvent: ev,
+                locals: {
+                    task: target,
+                }
             })
             .then(function(task) {
                 save(task);

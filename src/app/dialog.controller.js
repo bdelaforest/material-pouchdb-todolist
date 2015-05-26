@@ -5,12 +5,16 @@
         .module('app')
         .controller('DialogController', DialogController);
 
-    DialogController.$inject = ['$mdDialog'];
-    function DialogController($mdDialog) {
+    DialogController.$inject = ['$mdDialog', 'task'];
+    function DialogController($mdDialog, task) {
         var vm = this;
 
-        vm.task = {};
-        vm.cancel = cancel;
+        if (typeof task === 'undefined') {
+            task = {};
+        }
+
+        vm.task    = task;
+        vm.cancel  = cancel;
         vm.success = success;
 
         ////////////
