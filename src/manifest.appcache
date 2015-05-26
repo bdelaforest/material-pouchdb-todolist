@@ -1,0 +1,7 @@
+CACHE MANIFEST
+index.html
+app/vendors.min.js
+app/app.min.js
+app/app.min.css
+app/dialog.task.tpl.html
+assets/svg/menu.png

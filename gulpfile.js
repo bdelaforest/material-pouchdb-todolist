@@ -30,6 +30,7 @@ var cfg = {
             'src/vendor/pouchdb/dist/pouchdb.js',
             'src/vendor/lodash/lodash.js',
         ],
+        manifest: 'src/manifest.appcache',
     },
     dist: {
         dir:  'dist',
@@ -38,7 +39,7 @@ var cfg = {
         js:      'app/app.min.js',
         // tpl:     'app/templates.min.js',
         css:     'app/app.min.css',
-        vendors: 'app/vendors.min.js',
+        vendors: 'app/vendors.min.js'
     }
 };
 
@@ -96,11 +97,18 @@ gulp.task('copy-icons', ['clean'], function() {
         .pipe(gulp.dest(cfg.dist.dir+'/'+cfg.dist.icons));
 });
 
+gulp.task('copy-manifest', ['clean'], function() {
+    return gulp.src(cfg.src.manifest)
+        .pipe(gulp.dest(cfg.dist.dir));
+});
+
 
 /**
  * Main task
  */
-gulp.task('build', ['clean', 'build-css', 'build-js', 'build-vendors', 'copy-templates', 'copy-icons'], function() {
+gulp.task('build', [
+        'clean', 'build-css', 'build-js', 'build-vendors',
+        'copy-templates', 'copy-icons', 'copy-manifest'], function() {
     return gulp.src(cfg.src.index)
         .pipe(gulp.dest(cfg.dist.dir));
 });
