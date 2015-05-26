@@ -1,7 +1,8 @@
 CACHE MANIFEST
+#2015-05-26-11:00
 index.html
 app/vendors.min.js
 app/app.min.js
 app/app.min.css
 app/dialog.task.tpl.html
-assets/svg/menu.png
+assets/svg/menu.svg
