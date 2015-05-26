@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#2015-05-26-14:01
+#2015-05-26T15:35:30.326Z
 
 CACHE:
 #views
@@ -12,6 +12,7 @@ app/app.min.js
 app/app.min.css
 
 #assets
+assets/svg/add.svg
 assets/svg/menu.svg
 
 NETWORK:

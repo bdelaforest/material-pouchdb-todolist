@@ -1,5 +1,6 @@
 <!doctype html>
-<html manifest="manifest.appcache">
+<!-- <html manifest="manifest.appcache"> -->
+<html>
 <head>
     <meta charset="utf-8">
     <title>My Todo List</title>
@@ -17,12 +18,14 @@
         </md-button>
         <h1>My Todo List</h1>
         <span flex></span>
-        <md-button class="md-button md-secondary" aria-label="Add Task" ng-click="vm.showForm($event)">
-            Add a new task
+
+        <md-button class="add md-secondary md-fab" aria-label="Add Task"
+                ng-click="vm.showForm($event)">
+            <md-icon md-svg-icon="add"></md-icon>
         </md-button>
     </md-toolbar>
 
-    <div flex layout="row">
+    <div class="after-toolbar" flex layout="row">
         <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left"
                 layout="column">
             <md-tabs md-stretch-tabs="always">
@@ -68,11 +71,12 @@
         </md-sidenav>
 
         <md-content flex id="content">
-            <div ng-show="!vm.selected._id">
+            <div ng-show="!vm.selected._id" class="no-paper">
                 <h2 class="md-display-1 watermark light">No task selected</h2>
             </div>
-            <div ng-show="vm.selected._id" layout="column">
-                <section layout="row">
+            <section class="paper md-whiteframe-z2" layout="column"
+                    ng-show="vm.selected._id">
+                <div layout="row">
                     <h1 class="md-headline">{{vm.selected.title}}</h1>
                     <span flex></span>
 
@@ -86,11 +90,11 @@
                     <md-button class="md-raised auto" aria-label="Edit Task"
                             ng-click="vm.showForm($event, vm.selected)">Edit</md-button>
 
-                </section>
+                </div>
                 <div>
                     <p class="md-body-1" ng-bind-html="vm.selected.body | nl2br"></p>
                 </div>
-            </div>
+            </section>
         </md-content>
 
     </div>

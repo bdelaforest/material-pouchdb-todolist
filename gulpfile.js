@@ -5,10 +5,10 @@ var gulp        = require('gulp'),
     grename     = require('gulp-rename'),
     guglify     = require('gulp-uglify'),
     gclean      = require('gulp-clean'),
+    gtemplate   = require('gulp-template'),
     // gngannot    = require('gulp-ng-annotate'),
     gless       = require('gulp-less'),
     gminifyCSS  = require('gulp-minify-css'),
-    // gclosure    = require('gulp-jsclosure'),
     glivereload = require('gulp-livereload'),
     ghtml2js    = require('gulp-ng-html2js');
     // karma       = require('gulp-karma');
@@ -30,7 +30,7 @@ var cfg = {
             'src/vendor/pouchdb/dist/pouchdb.js',
             'src/vendor/lodash/lodash.js',
         ],
-        manifest: 'src/manifest.appcache',
+        manifest: 'src/manifest.tpl.appcache',
     },
     dist: {
         dir:  'dist',
@@ -39,7 +39,8 @@ var cfg = {
         js:      'app/app.min.js',
         // tpl:     'app/templates.min.js',
         css:     'app/app.min.css',
-        vendors: 'app/vendors.min.js'
+        vendors: 'app/vendors.min.js',
+        manifest: 'manifest.appcache',
     }
 };
 
@@ -99,6 +100,8 @@ gulp.task('copy-icons', ['clean'], function() {
 
 gulp.task('copy-manifest', ['clean'], function() {
     return gulp.src(cfg.src.manifest)
+        .pipe(gtemplate({manifestTimestamp: new Date().toISOString()}))
+        .pipe(gconcat(cfg.dist.manifest))
         .pipe(gulp.dest(cfg.dist.dir));
 });
 
@@ -114,6 +117,12 @@ gulp.task('build', [
 });
 
 
+
+gulp.task('watch-build', ['build'], function() {
+    // glivereload.changed('Source changed');
+});
+
+
 /*
  * TASKS TO BE CALLED BY USER
  */
@@ -125,7 +134,7 @@ gulp.task('watch',   ['build'], function() {
             cfg.src.scripts,
             'src/**/*.less',
         ],
-        ['build']);
+        ['watch-build']);
 });
 
 

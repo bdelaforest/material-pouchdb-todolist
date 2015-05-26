@@ -23,6 +23,7 @@
     function AppConfig($mdThemingProvider, $mdIconProvider, cfg) {
 
         $mdIconProvider
+            .icon("add",  "assets/svg/add.svg",  24)
             .icon("menu", "assets/svg/menu.svg", 24);
 
         $mdThemingProvider.theme('default')
