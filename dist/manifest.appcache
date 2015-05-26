@@ -1,8 +1,18 @@
 CACHE MANIFEST
-#2015-05-26-11:00
+#2015-05-26-11:16
+
+CACHE:
+#views
 index.html
+app/dialog.task.tpl.html
+
+#scripts
 app/vendors.min.js
 app/app.min.js
 app/app.min.css
-app/dialog.task.tpl.html
+
+#assets
 assets/svg/menu.svg
+
+NETWORK:
+*
