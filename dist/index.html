@@ -1,6 +1,5 @@
 <!doctype html>
-<!-- <html manifest="manifest.appcache"> -->
-<html>
+<html manifest="manifest.appcache">
 <head>
     <meta charset="utf-8">
     <title>My Todo List</title>
@@ -70,9 +69,7 @@
             <md-button ng-click="vm.confirm($event, vm.clearTasks)">Clear done tasks</md-button>
         </md-sidenav>
 
-        <!-- <div flex> -->
         <md-content id="content">
-
             <div ng-show="!vm.selected._id" class="no-paper">
                 <h2 class="md-display-1 watermark light">No task selected</h2>
             </div>
@@ -98,7 +95,6 @@
                 </div>
             </section>
         </md-content>
-        <!-- </div> -->
 
     </div>
 
