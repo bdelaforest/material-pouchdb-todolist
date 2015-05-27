@@ -99,11 +99,17 @@
          */
 
         function selectTask(task) {
-            var pending = $mdSidenav('left').close() || $q.when(true);
+            if (task._id !== vm.selected._id) {
+                var pending = $mdSidenav('left').close() || $q.when(true);
 
-            pending.then(function(){
-                vm.selected = task;
-            });
+                //reset vm.selected to trigger ng-show animation
+                vm.selected = {};
+                $scope.$apply();
+
+                pending.then(function(){
+                    vm.selected = task;
+                });
+            }
         }
 
         /**

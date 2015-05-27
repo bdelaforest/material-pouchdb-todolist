@@ -12,21 +12,21 @@
 </head>
 <body ng-app="app" layout="column" ng-controller="TasksController as vm" ng-cloak>
 
+    <md-button class="add md-secondary md-fab" aria-label="Add Task"
+            ng-click="vm.showForm($event)">
+        <md-icon md-svg-icon="add"></md-icon>
+    </md-button>
+
     <md-toolbar layout="row" class="md-whiteframe-z1 md-toolbar-tools">
         <md-button class="menu" hide-gt-sm ng-click="vm.toggleSidebar()" aria-label="Show Task List">
             <md-icon md-svg-icon="menu"></md-icon>
         </md-button>
         <h1>My Todo List</h1>
         <span flex></span>
-
-        <md-button class="add md-secondary md-fab" aria-label="Add Task"
-                ng-click="vm.showForm($event)">
-            <md-icon md-svg-icon="add"></md-icon>
-        </md-button>
     </md-toolbar>
 
-    <div class="after-toolbar" flex layout="row">
-        <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left"
+    <div class="wrapper" flex layout="row">
+        <md-sidenav flex md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left"
                 layout="column">
             <md-tabs md-stretch-tabs="always">
                 <md-tab flex label="ALL" md-on-select="vm.filterTasks('all');"></md-tab>
@@ -43,7 +43,7 @@
             </div>
 
             <md-list flex>
-                <md-list-item class="task-list-item animate"
+                <md-list-item class="task-list-item animate-list"
                         ng-repeat="task in vm.tasks |
                             orderBy:'createdAt':true track by task._id"
                         ng-class="{'active' : task._id === vm.selected._id,
@@ -70,11 +70,13 @@
             <md-button ng-click="vm.confirm($event, vm.clearTasks)">Clear done tasks</md-button>
         </md-sidenav>
 
-        <md-content flex id="content">
+        <!-- <div flex> -->
+        <md-content id="content">
+
             <div ng-show="!vm.selected._id" class="no-paper">
                 <h2 class="md-display-1 watermark light">No task selected</h2>
             </div>
-            <section class="paper md-whiteframe-z2" layout="column"
+            <section class="paper md-whiteframe-z2 animate-view" layout="column"
                     ng-show="vm.selected._id">
                 <div layout="row">
                     <h1 class="md-headline">{{vm.selected.title}}</h1>
@@ -96,6 +98,7 @@
                 </div>
             </section>
         </md-content>
+        <!-- </div> -->
 
     </div>
 

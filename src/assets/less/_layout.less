@@ -23,6 +23,21 @@ textarea.md-input {
 }
 
 
+
+/* Utils */
+
+.center {
+    text-align: center;
+}
+.watermark {
+    opacity: .2;
+
+    &.light {
+        opacity: .1;
+    }
+}
+
+
 /* Toolbar area */
 
 .menu {
@@ -39,33 +54,23 @@ md-toolbar h1 {
     font-weight: 400;
 }
 
+.add {
+  // top: auto;
+  right: 20px;
+  top: 24px;
+  position: absolute;
+}
+
+
 
 /* Sidenav area */
 
 md-sidenav md-list {
     padding: 0px 0px 8px 0px;
+    overflow: auto;
 }
-
-
-.add {
-  // top: auto;
-  right: 24px;
-  bottom: -24px;
-  position: absolute;
-}
-
-
-/* Utils */
-
-.center {
-    text-align: center;
-}
-.watermark {
-    opacity: .2;
-
-    &.light {
-        opacity: .1;
-    }
+md-tabs {
+    min-height: 48px;
 }
 
 
@@ -91,23 +96,32 @@ md-sidenav md-list {
 
 
 
+@content-offset-top: 100px;
+@content-offset-left: 40px;
 
 /* Primary content area */
 #content  {
-    margin-right: 110px;
-    margin-left: 40px;
+    width: 100%;
+    overflow: auto;
     z-index: 10;
     background: transparent;
-    margin-top: -30px;
+    margin-top: -@content-offset-top;
+    // margin-right: 100px;
 }
 
 .no-paper {
-    margin-top: 50px;
+    margin-top: @content-offset-top + 30px;
+    margin-left: @content-offset-left;
 }
 .paper {
+    margin-top: @content-offset-top - 30px;
+    margin-right: 110px;
+    margin-bottom: @content-offset-left;
+    margin-left: @content-offset-left;
     background-color: white;
     overflow: auto;
     padding: 5px 20px 20px;
+    min-height: 50vh;
 }
 
 // .paper,

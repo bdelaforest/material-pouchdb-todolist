@@ -128,7 +128,7 @@ gulp.task('watch-build', ['build'], function() {
  */
 gulp.task('default', ['build']);
 gulp.task('watch',   ['build'], function() {
-    glivereload.listen();
+    // glivereload.listen();
     gulp.watch([
             'src/**/*.html',
             cfg.src.scripts,
@@ -136,10 +136,6 @@ gulp.task('watch',   ['build'], function() {
         ],
         ['watch-build']);
 });
-
-
-
-// gulp.task('default', ['build']);
 
 
 // Handle the error
