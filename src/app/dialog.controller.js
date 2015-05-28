@@ -8,11 +8,11 @@
     DialogController.$inject = ['$mdDialog', 'task'];
     function DialogController($mdDialog, task) {
         var vm = this,
-            title = 'New task';
+            title = 'Edit task';
 
         if (typeof task === 'undefined') {
             task = {};
-            title = 'Edit task';
+            title = 'New task';
         }
 
         vm.task    = task;
