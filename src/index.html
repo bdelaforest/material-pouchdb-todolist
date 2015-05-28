@@ -82,7 +82,7 @@
                         {{vm.selected.title}}
                     </h1>
                     <md-input-container
-                        ng-show="vm.editMode">
+                        ng-if="vm.editMode">
                         <label>Title</label>
                         <input class="md-headline" ng-model="vm.selected.title">
                     </md-input-container>
