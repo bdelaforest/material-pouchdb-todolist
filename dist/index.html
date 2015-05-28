@@ -76,17 +76,16 @@
             <section class="paper md-whiteframe-z2 animate-view" layout="column"
                     ng-show="vm.selected._id">
                 <div layout="row">
-                    <h1 class="md-headline no-outline"
+                    <h1 flex class="md-headline no-outline"
                         ng-show="!vm.editMode"
                         ng-click="vm.toggleEdit(vm.selected, true)">
                         {{vm.selected.title}}
                     </h1>
-                    <md-input-container
+                    <md-input-container flex
                         ng-if="vm.editMode">
                         <label>Title</label>
                         <input class="md-headline" ng-model="vm.selected.title">
                     </md-input-container>
-                    <span flex></span>
 
                     <md-switch class="md-secondary" aria-label="Set done"
                             ng-model="vm.selected.done"
