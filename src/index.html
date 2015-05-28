@@ -81,7 +81,7 @@
                         ng-click="vm.toggleEdit(vm.selected, true)">
                         {{vm.selected.title}}
                     </h1>
-                    <md-input-container flex
+                    <md-input-container flex class="mr"
                         ng-if="vm.editMode">
                         <label>Title</label>
                         <input class="md-headline" ng-model="vm.selected.title">
