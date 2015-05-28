@@ -8,6 +8,7 @@
     angular
         .module('app', [
             'ngMaterial',
+            'ngMdIcons',
             'pouchDB',
         ])
         .filter('nl2br', nl2br)
@@ -24,6 +25,8 @@
 
         $mdIconProvider
             .icon("add",  "assets/svg/add.svg",  24)
+            .icon("edit", "assets/svg/edit.svg", 24)
+            .icon("save", "assets/svg/save.svg", 24)
             .icon("menu", "assets/svg/menu.svg", 24);
 
         $mdThemingProvider.theme('default')

@@ -29,6 +29,8 @@ var cfg = {
             'src/vendor/angular-material/angular-material.js',
             'src/vendor/pouchdb/dist/pouchdb.js',
             'src/vendor/lodash/lodash.js',
+            'src/vendor/angular-material-icons/angular-material-icons.js',
+            'src/vendor/svg-morpheus/compile/unminified/svg-morpheus.js',
         ],
         manifest: 'src/manifest.tpl.appcache',
     },

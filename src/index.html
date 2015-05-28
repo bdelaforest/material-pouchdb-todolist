@@ -76,22 +76,47 @@
             <section class="paper md-whiteframe-z2 animate-view" layout="column"
                     ng-show="vm.selected._id">
                 <div layout="row">
-                    <h1 class="md-headline">{{vm.selected.title}}</h1>
+                    <h1 class="md-headline no-outline"
+                        ng-show="!vm.editMode"
+                        ng-click="vm.toggleEdit(vm.selected, true)">
+                        {{vm.selected.title}}
+                    </h1>
+                    <md-input-container
+                        ng-show="vm.editMode">
+                        <label>Title</label>
+                        <input class="md-headline" ng-model="vm.selected.title">
+                    </md-input-container>
                     <span flex></span>
 
                     <md-switch class="md-secondary" aria-label="Set done"
                             ng-model="vm.selected.done"
                             ng-change="vm.save(vm.selected)">
-                        <span ng-show="!vm.selected.done" >TODO</span>
-                        <span ng-show="vm.selected.done" >DONE</span>
+                        <span ng-show="!vm.selected.done">TODO</span>
+                        <span ng-show="vm.selected.done">DONE</span>
                     </md-switch>
 
-                    <md-button class="md-raised auto" aria-label="Edit Task"
-                            ng-click="vm.showForm($event, vm.selected)">Edit</md-button>
-
+                    <md-button class="edit auto md-secondary" aria-label="Edit Task"
+                            ng-class="{'md-raised md-accent' : vm.editMode,
+                                       'gray-icon' : !vm.editMode}"
+                            ng-click="vm.toggleEdit(vm.selected)">
+                        <ng-md-icon icon="{{ vm.editIcon }}" options="{{vm.iconOptions}}" size="28"></ng-md-icon>
+                        <md-tooltip md-direction="bottom">
+                            <span ng-show="!vm.editMode">Edit task</span>
+                            <span ng-show="vm.editMode">Save task</span>
+                        </md-tooltip>
+                    </md-button>
                 </div>
                 <div>
-                    <p class="md-body-1" ng-bind-html="vm.selected.body | nl2br"></p>
+                    <p class="md-body-1 no-outline"
+                        ng-show="!vm.editMode"
+                        ng-click="vm.toggleEdit(vm.selected, true)"
+                        ng-bind-html="vm.selected.body | nl2br"></p>
+
+                    <md-input-container
+                        ng-if="vm.editMode">
+                        <label>Description</label>
+                        <textarea ng-model="vm.selected.body" class="md-body-1"></textarea>
+                    </md-input-container>
                 </div>
             </section>
         </md-content>

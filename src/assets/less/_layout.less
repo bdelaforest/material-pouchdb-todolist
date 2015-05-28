@@ -36,6 +36,10 @@ textarea.md-input {
         opacity: .1;
     }
 }
+.no-outline {
+    outline: none;
+}
+
 
 
 /* Toolbar area */
@@ -61,7 +65,9 @@ md-toolbar h1 {
   position: absolute;
 }
 
-
+.gray-icon {
+    color: rgba(0,0,0,0.54);
+}
 
 /* Sidenav area */
 
@@ -121,8 +127,24 @@ md-tabs {
     background-color: white;
     overflow: auto;
     padding: 5px 20px 20px;
-    min-height: 50vh;
+    min-height: 90vh;
 }
+
+.edit {
+    min-width: 0;
+}
+
+//copy style of md-icon
+ng-md-icon {
+    margin: auto;
+    background-repeat: no-repeat no-repeat;
+    display: inline-block;
+    fill: currentColor;
+    height: 28px;
+    width: 28px;
+    vertical-align: middle;
+}
+
 
 // .paper,
 // .no-paper {

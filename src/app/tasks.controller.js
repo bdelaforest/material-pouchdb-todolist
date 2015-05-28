@@ -7,7 +7,9 @@
 
     TasksController.$inject = ['$scope', '$q', '$filter', '$timeout', '$mdDialog', '$mdSidenav', 'taskService', 'pouchDB'];
     function TasksController($scope, $q, $filter, $timeout, $mdDialog, $mdSidenav, taskService, pouchDB) {
-        var vm = this;
+        var vm = this,
+            iconEdit = 'edit',
+            iconSave = 'save';
 
         // View Variables
         vm.tasks         = [];
@@ -21,8 +23,15 @@
         vm.filterTasks   = filterTasks;
         vm.isElem        = isElem;
         vm.confirm       = confirm;
+        vm.toggleEdit    = toggleEdit;
+        vm.editMode      = false;
         vm.loading       = false;
+        vm.editIcon      = iconEdit;
         vm.selected      = {};
+        vm.iconOptions   = {
+            // 'rotation': 'none',
+            'duration': 300,
+        };
 
         vm.debug = function(arg) {
             console.log('debug', arg);
@@ -52,39 +61,13 @@
         }
 
 
-
-        // pouchDB.sync.on('change', function (info) {
-        //   // handle change
-        //     console.log("change");
-        // }).on('paused', function () {
-        //   // replication paused (e.g. user went offline)
-        //     console.log("paused");
-        // }).on('active', function () {
-        //   // replicate resumed (e.g. user went back online)
-        //     vm.loader = true;
-        //     console.log("active");
-        //     $rootScope.$digest();
-        // }).on('denied', function (info) {
-        //   // a document failed to replicate, e.g. due to permissions
-        //     console.log("denied");
-        // }).on('complete', function (info) {
-        //   // handle complete
-        //     vm.loader = false;
-        //     loadTasks();
-        //     console.log("complete");
-        //     $rootScope.$digest();
-        // }).on('error', function (err) {
-        //   // handle error
-        //     console.log("error");
-        // });
-
-
-
         //loadTasks first change (to load tasks after sync end)
         pouchDB.sync
             .on('active', function() {
-                vm.loading = true;
-                $scope.$apply();
+                //$timeout forces a $scope.$apply()
+                $timeout(function() {
+                    vm.loading = true;
+                }, 0);
             })
             .on('complete', function() {
                 vm.loading = false;
@@ -93,6 +76,11 @@
         loadTasks();
 
 
+        //toggle edit icon if needed
+        function checkEditIcon() {
+            vm.editIcon = vm.editMode ? iconSave : iconEdit;
+        }
+
 
         /**
          * ViewModel functions
@@ -100,15 +88,19 @@
 
         function selectTask(task) {
             if (task._id !== vm.selected._id) {
+                vm.editMode = false;
+                checkEditIcon();
+
                 var pending = $mdSidenav('left').close() || $q.when(true);
 
-                //reset vm.selected to trigger ng-show animation
                 vm.selected = {};
-                $scope.$apply();
 
-                pending.then(function(){
-                    vm.selected = task;
-                });
+                //reset vm.selected to trigger ng-show animation
+                $timeout(function() {
+                    pending.then(function(){
+                        vm.selected = task;
+                    });
+                }, 0);
             }
         }
 
@@ -135,29 +127,22 @@
             .then(function(task) {
                 save(task);
             });
-        };
+        }
+
+        function toggleEdit(target, forceActive) {
+            //save if we were in editMode
+            !forceActive && vm.editMode && save(target);
+
+            //toggle edit mode
+            vm.editMode = forceActive || !vm.editMode;
+
+            //toggle icon
+            checkEditIcon();
+        }
 
 
         // function toggleState(task) {
         function save(task, timeout) {
-            // function saveFunc() {
-            //     taskService.save(task).then(function() {
-            //         //update tasks list
-            //         loadTasks();
-            //     });
-            // }
-
-            // if (typeof timeout !== 'undefined') {
-            //     vm.selected = task;
-            //     $timeout(function() {
-            //         saveFunc();
-            //     }, 300);
-            // }
-            // else {
-            //     saveFunc();
-            // }
-
-
             taskService.save(task).then(function() {
                 //update tasks list
                 loadTasks();
