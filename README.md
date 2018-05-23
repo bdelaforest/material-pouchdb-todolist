@@ -6,6 +6,8 @@ Work in progress...
 
 [Demo](https://bdelaforest.github.io/)
 
+[Edit 2018-05-23]: ⚠️The demo only works locally as the provider _irisCouch_ doesn't exist anymore.
+
 
 ## About
 
